@@ -30,7 +30,7 @@ endif()
 set(EBUR128_VERSION_MAJOR 1)
 set(EBUR128_VERSION 1.2.6)
 
-add_library(ebur128 ebur128.c)
+add_library(ebur128 STATIC ebur128.c)
 set_target_properties(ebur128 PROPERTIES
   SOVERSION ${EBUR128_VERSION_MAJOR}
   VERSION ${EBUR128_VERSION}
