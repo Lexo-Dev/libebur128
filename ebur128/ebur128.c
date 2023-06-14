@@ -119,6 +119,7 @@ static double histogram_energy_boundaries[1001];
 static interpolator*
 interp_create(unsigned int taps, unsigned int factor, unsigned int channels) {
   int errcode; /* unused */
+  (void)(errcode);
   interpolator* interp;
   unsigned int j;
 
@@ -1069,7 +1070,7 @@ static int ebur128_calc_relative_threshold(ebur128_state* st,
   if (st->d->use_histogram) {
     for (i = 0; i < 1000; ++i) {
       *relative_threshold +=
-          st->d->block_energy_histogram[i] * histogram_energies[i];
+          (double)(st->d->block_energy_histogram[i]) * histogram_energies[i];
       *above_thresh_counter += st->d->block_energy_histogram[i];
     }
   } else {
@@ -1127,7 +1128,7 @@ ebur128_gated_loudness(ebur128_state** sts, size_t size, double* out) {
     if (sts[i]->d->use_histogram) {
       for (j = start_index; j < 1000; ++j) {
         gated_loudness +=
-            sts[i]->d->block_energy_histogram[j] * histogram_energies[j];
+            (double)(sts[i]->d->block_energy_histogram[j]) * histogram_energies[j];
         above_thresh_counter += sts[i]->d->block_energy_histogram[j];
       }
     } else {
@@ -1304,8 +1305,8 @@ int ebur128_loudness_range_multiple(ebur128_state** sts,
       }
       for (j = 0; j < 1000; ++j) {
         hist[j] += sts[i]->d->short_term_block_energy_histogram[j];
-        stl_size += sts[i]->d->short_term_block_energy_histogram[j];
-        stl_power += sts[i]->d->short_term_block_energy_histogram[j] *
+        stl_size += (size_t)(sts[i]->d->short_term_block_energy_histogram[j]);
+        stl_power += (double)(sts[i]->d->short_term_block_energy_histogram[j]) *
                      histogram_energies[j];
       }
     }
@@ -1314,7 +1315,7 @@ int ebur128_loudness_range_multiple(ebur128_state** sts,
       return EBUR128_SUCCESS;
     }
 
-    stl_power /= stl_size;
+    stl_power /= (double)(stl_size);
     stl_integrated = minus_twenty_decibels * stl_power;
 
     if (stl_integrated < histogram_energy_boundaries[0]) {
@@ -1334,8 +1335,8 @@ int ebur128_loudness_range_multiple(ebur128_state** sts,
       return EBUR128_SUCCESS;
     }
 
-    percentile_low = (size_t) ((stl_size - 1) * 0.1 + 0.5);
-    percentile_high = (size_t) ((stl_size - 1) * 0.95 + 0.5);
+    percentile_low = (size_t) ((double)(stl_size - 1) * 0.1 + 0.5);
+    percentile_high = (size_t) ((double)(stl_size - 1) * 0.95 + 0.5);
 
     stl_size = 0;
     j = index;
@@ -1396,8 +1397,8 @@ int ebur128_loudness_range_multiple(ebur128_state** sts,
   }
 
   if (stl_relgated_size) {
-    h_en = stl_relgated[(size_t) ((stl_relgated_size - 1) * 0.95 + 0.5)];
-    l_en = stl_relgated[(size_t) ((stl_relgated_size - 1) * 0.1 + 0.5)];
+    h_en = stl_relgated[(size_t) ((double)(stl_relgated_size - 1) * 0.95 + 0.5)];
+    l_en = stl_relgated[(size_t) ((double)(stl_relgated_size - 1) * 0.1 + 0.5)];
     free(stl_vector);
     *out = ebur128_energy_to_loudness(h_en) - ebur128_energy_to_loudness(l_en);
   } else {
