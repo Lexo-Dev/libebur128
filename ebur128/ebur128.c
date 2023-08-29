@@ -1305,7 +1305,7 @@ int ebur128_loudness_range_multiple(ebur128_state** sts,
       }
       for (j = 0; j < 1000; ++j) {
         hist[j] += sts[i]->d->short_term_block_energy_histogram[j];
-        stl_size += sts[i]->d->short_term_block_energy_histogram[j];
+        stl_size += (size_t)(sts[i]->d->short_term_block_energy_histogram[j]);
         stl_power += (double)(sts[i]->d->short_term_block_energy_histogram[j]) *
                      histogram_energies[j];
       }
