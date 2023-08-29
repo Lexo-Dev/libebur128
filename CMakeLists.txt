@@ -1,5 +1,5 @@
-cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
-project(libebur128 C)
+cmake_minimum_required(VERSION 3.21 FATAL_ERROR)
+project(libebur128 VERSION 0.1 LANGUAGES C)
 
 option(BUILD_SHARED_LIBS
     "Build shared libraries instead of static ones" ON)
